@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class TransferProducer {
 
     private static final String TRANSFERS_TOPIC = "transfers";
-
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void sendTransfer(final Transfer transfer) {
@@ -21,6 +20,11 @@ public class TransferProducer {
         log.info("Sending message to Kafka, transferMessage: {}", transferMessage);
         kafkaTemplate.send(TRANSFERS_TOPIC, transferMessage);
         log.info("Message was sent");
+    }
+
+    public void checkCashBillAccount(final Transfer transfer) {
+        TransferMessage transferMessage = new TransferMessage(transfer);
+        log.error("ERROR: There are insufficient funds on the account! {}", transferMessage);
     }
 
 }
